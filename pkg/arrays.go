@@ -9,8 +9,17 @@ import (
 var (
 	ErrEmptyArray    = errors.New("error, the array element is empty")
 	ErrIndexOutRange = errors.New("error, index out of range")
+	ErrNotFound      = errors.New("item was not found in array")
+	ErrWrongUsage    = errors.New("no index were passed to 'ToSlice' method")
 )
 
+const (
+	FULL_COPY Options = iota
+	USE_INDEX
+	ARR_END
+)
+
+type Options int8
 type Array[T any] []T
 
 // Creates a new generic Array
@@ -134,6 +143,82 @@ func (a *Array[T]) Unshift(item T) {
 
 	*a = Array[T]{item}
 	*a = append(*a, tmp...)
+}
+
+// # ToSlice method returns a copy of the array as a slice
+//
+//	This method can return the entire array as a slice or just a portion of it
+//
+// Return the entire array:
+//
+//	arr := arrays.New("john", "doe")
+//	slc, err := arr.ToSlice(FULL_COPY)
+//
+//	if err != nil {
+//		// handle error
+//	}
+//
+// Return from a specific index:
+//
+//	arr := arrays.New(1, 2, 3, 4, 5, 6, 7, 8)
+//	slc, _ := arr.ToSlice(USE_INDEX, 2, 5)
+//
+//	fmt.Println(slc) // should print [3, 4, 5, 6]
+//
+// Use the ARR_END constant:
+//
+// ARR_END is a constant used to pass the last item in an array without the risk of going out of range
+//
+//	arr := arrays.New("wake", "eat", "sleep", "repeat")
+//	slc, _ := arr.ToSlice(ARR_END, 2) // 2 here means the starting index, the second one do not need to be passed
+//	fmt.Println(slc) // should print ["sleep", "repeat"]
+func (a Array[T]) ToSlice(opt Options, indexes ...int) ([]T, error) {
+	slc := make([]T, 0)
+	l := a.Len() - 1
+
+	switch opt {
+	case FULL_COPY:
+		slc = append(slc, a...)
+
+	case USE_INDEX:
+		// fails if more than 2 index values are passed or in case of wrong index values
+		if len(indexes) != 2 {
+			return slc, ErrWrongUsage
+		} else if indexes[0] > l || indexes[1] > l || indexes[0] < 0 || indexes[1] < 0 {
+			return slc, ErrIndexOutRange
+		}
+
+		for i := indexes[0]; i <= indexes[1]; i++ {
+			slc = append(slc, a[i])
+		}
+
+	case ARR_END:
+
+		if len(indexes) < 1 {
+			return slc, ErrWrongUsage
+		} else if indexes[0] > l {
+			return slc, ErrIndexOutRange
+		}
+
+		for i := indexes[0]; i <= l; i++ {
+			slc = append(slc, a[i])
+		}
+	}
+
+	return slc, nil
+}
+
+// The Find method returns the value of the first array item that satisfies the provided test function
+//
+// returns error if item was not found
+func (a Array[T]) Find(f func(int, T) bool) (T, error) {
+	for i, v := range a {
+		if f(i, v) {
+			return v, nil
+		}
+	}
+
+	return *new(T), ErrNotFound
 }
 
 /*

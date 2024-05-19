@@ -89,6 +89,73 @@ func TestUnshift(t *testing.T) {
 	}
 }
 
+func TestToSlice(t *testing.T) {
+	arr := New("John", "Doe")
+	slc, _ := arr.ToSlice(FULL_COPY)
+
+	if len(slc) != 2 || slc[0] != "John" || slc[1] != "Doe" {
+		t.Fail()
+	}
+
+	arr.Push("foo", "bar")
+	slc2, _ := arr.ToSlice(USE_INDEX, 0, 1)
+
+	if len(slc2) != 2 || slc2[0] != "John" || slc2[1] != "Doe" {
+		t.Log(slc)
+		t.Fail()
+	}
+
+	_, err := arr.ToSlice(USE_INDEX, 1, 1, 1)
+	if err == nil {
+		t.Fail()
+	}
+
+	_, err = arr.ToSlice(USE_INDEX, -1, 1)
+	if err == nil {
+		t.Fail()
+	}
+
+	_, err = arr.ToSlice(USE_INDEX, 0, 10)
+	if err == nil {
+		t.Fail()
+	}
+
+	_, err = arr.ToSlice(USE_INDEX)
+	if err == nil {
+		t.Fail()
+	}
+
+	slc3, _ := arr.ToSlice(USE_INDEX, 3, 3)
+	if slc3[0] != "bar" {
+		t.Fail()
+	}
+
+	slc4, err := arr.ToSlice(ARR_END, 1)
+	if len(slc4) != 3 || err != nil {
+		t.Fail()
+	}
+}
+
+func TestFind(t *testing.T) {
+	arr := New(12, 54, 2, 0, 322)
+
+	found, err := arr.Find(func(_, i2 int) bool {
+		return i2 > 100
+	})
+
+	if err != nil || found != 322 {
+		t.Fail()
+	}
+
+	found, err = arr.Find(func(_, i2 int) bool {
+		return i2 < 0
+	})
+
+	if found != 0 || err == nil {
+		t.Fail()
+	}
+}
+
 func TestMap(t *testing.T) {
 	arr := New(2, 3, 5, 7)
 
