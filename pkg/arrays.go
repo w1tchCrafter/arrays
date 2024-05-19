@@ -7,7 +7,8 @@ import (
 )
 
 var (
-	ErrEmptyArray = errors.New("error, the array element is empty")
+	ErrEmptyArray    = errors.New("error, the array element is empty")
+	ErrIndexOutRange = errors.New("error, index out of range")
 )
 
 type Array[T any] []T
@@ -59,25 +60,44 @@ func (a Array[T]) Join(sep string) string {
 }
 
 // At returns the element at the given index
-func (a Array[T]) At(index int) T {
-	return a[index]
+//
+// Returns error if index don't exists
+func (a Array[T]) At(index int) (T, error) {
+	var item T
+
+	if index > a.Len()-1 {
+		return item, ErrIndexOutRange
+	}
+
+	item = a[index]
+	return item, nil
 }
 
 // The Pop method removes the last element then returns it
 //
 // Returns error and an zeroed generic value if array is empty
-func (a Array[T]) Pop() (T, error) {
+func (a *Array[T]) Pop() (T, error) {
 	var deleted T
+	tmp := New[T]()
 
-	if a.Len() > 0 {
-		deleted = a[len(a)-1]
-		return deleted, nil
+	if a.Len() == 0 {
+		return deleted, ErrEmptyArray
 	}
 
-	return deleted, ErrEmptyArray
+	for i, v := range *a {
+		if i == a.Len()-1 {
+			deleted = v
+			break
+		}
+
+		tmp = append(tmp, v)
+	}
+
+	*a = tmp
+	return deleted, nil
 }
 
-// Push method adds one or more new items to the array
+// Push method adds one or more new items to the end of the array
 func (a *Array[T]) Push(items ...T) {
 	*a = append(*a, items...)
 }
@@ -85,17 +105,29 @@ func (a *Array[T]) Push(items ...T) {
 // The Shift method Removes the first item then returns it
 //
 // Returns error and an zeroed generic value if array is empty
-func (a Array[T]) Shift() (T, error) {
+func (a *Array[T]) Shift() (T, error) {
 	var deleted T
+	tmp := New[T]()
 
-	if a.Len() > 0 {
-		deleted = a[0]
-		return deleted, nil
+	if a.Len() == 0 {
+		return deleted, ErrEmptyArray
 	}
 
-	return deleted, ErrEmptyArray
+	for i, v := range *a {
+		if i == 0 {
+			deleted = v
+			continue
+		}
+
+		tmp = append(tmp, v)
+	}
+
+	*a = tmp
+	return deleted, nil
+
 }
 
+// Pushes an item to the beggining of the array
 func (a *Array[T]) Unshift(item T) {
 	tmp := Array[T]{}
 	tmp = append(tmp, *a...)
