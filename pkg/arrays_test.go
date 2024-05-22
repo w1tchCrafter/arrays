@@ -27,6 +27,12 @@ func TestJoin(t *testing.T) {
 	if arr.Join(" ") != "john doe is foo bar" {
 		t.Fail()
 	}
+
+	person1 := map[string]any{"name": "John", "age": 19}
+	person2 := map[string]any{"name": "Mary", "age": 23}
+	arr2 := New(person1, person2)
+
+	t.Log(arr2.Join(" "))
 }
 
 func TestAt(t *testing.T) {
@@ -69,6 +75,18 @@ func TestPush(t *testing.T) {
 	if arr[0] != "witch" || arr[1] != "crafter" {
 		t.Fail()
 	}
+
+	arr.Push([]string{"john", "doe"}...)
+
+	if arr[2] != "john" || arr[3] != "doe" {
+		t.Fail()
+	}
+
+	arr.Push(New("spongebob")...)
+
+	if arr[4] != "spongebob" {
+		t.Fail()
+	}
 }
 
 func TestShift(t *testing.T) {
@@ -85,6 +103,12 @@ func TestUnshift(t *testing.T) {
 	arr.Unshift(1)
 
 	if arr[0] != 1 || arr.Len() != 6 {
+		t.Fail()
+	}
+
+	arr.Unshift(-1, 0)
+
+	if arr[0] != -1 || arr[1] != 0 {
 		t.Fail()
 	}
 }

@@ -22,17 +22,19 @@ const (
 type Options int8
 type Array[T any] []T
 
-// Creates a new generic Array
+// # New
 //
-// To create an empty array, the type must be passed
+//	Creates a new generic Array
+//
+// To create an empty array, the type must be passed:
 //
 //	arr := arrays.New[string]()
 //
-// The type can be ommited if the array is initialized
+// The type can be ommited if the array is initialized:
 //
 //	arr := arrays.New("John", "Doe")
 //
-// You can also initialize the new Array with an existing slice
+// You can also initialize the new Array with an existing slice:
 //
 //	slc := []int{1, 2, 3, 4, 5, 6, 7}
 //	arr := arrays.New(slc...)
@@ -46,18 +48,47 @@ func New[T any](items ...T) Array[T] {
 	return array
 }
 
+// # ForEach
+//
+// execute a callback function en each array element
+//
+// Example:
+//
+//	names := arrays.New("john", "doe")
+//	names.ForEach(func(i int, s string) {
+//		fmt.Printf("index: %d, value: %s\n", i, s)
+//	})
 func (a Array[T]) ForEach(f func(int, T)) {
 	for i, v := range a {
 		f(i, v)
 	}
 }
 
+// # Len
+//
 // Returns the array lenght
 func (a Array[T]) Len() int {
 	return len(a)
 }
 
-// Join returns a string made of the Array elements separated by the paramenter sep
+// #Join
+//
+// join returns a string made of the Array elements separated by the paramenter sep
+//
+// # works with any datatype not only strings
+//
+//	person1 := map[string]any{"name": "John", "age": 19}
+//	person2 := map[string]any{"name": "Mary", "age": 23}
+//
+//	arr := arrays.New(person1, person2)
+//
+//	fmt.Println(arr.Join(" ")) // prints: "map[age:19 name:John] map[age:23 name:Mary]"
+//
+// # Joining array of strings with a comma
+//
+//	arr := arrays.New("I", "love", "pizza")
+//
+// fmt.Println(arr.Join(" ")) // prints: "I love pizza"
 func (a Array[T]) Join(sep string) string {
 	strResult := make([]string, 0)
 
@@ -68,7 +99,9 @@ func (a Array[T]) Join(sep string) string {
 	return strings.Join(strResult, sep)
 }
 
-// At returns the element at the given index
+// # At
+//
+// the At method returns the element at the given index
 //
 // Returns error if index don't exists
 func (a Array[T]) At(index int) (T, error) {
@@ -82,7 +115,9 @@ func (a Array[T]) At(index int) (T, error) {
 	return item, nil
 }
 
-// The Pop method removes the last element then returns it
+// # Pop
+//
+// the Pop method removes the last element from array then returns it
 //
 // Returns error and an zeroed generic value if array is empty
 func (a *Array[T]) Pop() (T, error) {
@@ -106,14 +141,33 @@ func (a *Array[T]) Pop() (T, error) {
 	return deleted, nil
 }
 
-// Push method adds one or more new items to the end of the array
+// # Push
+//
+// the push method appends one or more new items to the end of the array
+//
+// examples:
+//
+// # append a single element:
+//
+//	foods := arrays.New[string]();
+//	foods.push("pizza")
+//
+// # append multiple elements:
+//
+// foods.Push("hamburguer", "lasagna", "fries")
+//
+// # append slice or Array:
+//
+//	foods.Push([]string{"tomato", "potato"}...)
 func (a *Array[T]) Push(items ...T) {
 	*a = append(*a, items...)
 }
 
-// The Shift method Removes the first item then returns it
+// # Shift
 //
-// Returns error and an zeroed generic value if array is empty
+// the Shift method Removes the first item from the array then returns it
+//
+// returns error and an zeroed generic value if array is empty
 func (a *Array[T]) Shift() (T, error) {
 	var deleted T
 	tmp := New[T]()
@@ -136,12 +190,14 @@ func (a *Array[T]) Shift() (T, error) {
 
 }
 
-// Pushes an item to the beggining of the array
-func (a *Array[T]) Unshift(item T) {
+// # Unshift
+//
+// works the same way as the Push method, but ushes an item to the beggining of the array
+func (a *Array[T]) Unshift(items ...T) {
 	tmp := Array[T]{}
 	tmp = append(tmp, *a...)
 
-	*a = Array[T]{item}
+	*a = New(items...)
 	*a = append(*a, tmp...)
 }
 
@@ -149,7 +205,7 @@ func (a *Array[T]) Unshift(item T) {
 //
 //	This method can return the entire array as a slice or just a portion of it
 //
-// Return the entire array:
+// # Return the entire array:
 //
 //	arr := arrays.New("john", "doe")
 //	slc, err := arr.ToSlice(FULL_COPY)
@@ -158,14 +214,14 @@ func (a *Array[T]) Unshift(item T) {
 //		// handle error
 //	}
 //
-// Return from a specific index:
+// # Return from a specific index:
 //
 //	arr := arrays.New(1, 2, 3, 4, 5, 6, 7, 8)
 //	slc, _ := arr.ToSlice(USE_INDEX, 2, 5)
 //
 //	fmt.Println(slc) // should print [3, 4, 5, 6]
 //
-// Use the ARR_END constant:
+// # Use the ARR_END constant:
 //
 // ARR_END is a constant used to pass the last item in an array without the risk of going out of range
 //
@@ -208,9 +264,28 @@ func (a Array[T]) ToSlice(opt Options, indexes ...int) ([]T, error) {
 	return slc, nil
 }
 
-// The Find method returns the value of the first array item that satisfies the provided test function
+// # Find
 //
-// returns error if item was not found
+// the Find method returns the value of the first array item that satisfies the provided test function
+//
+// examples:
+//
+// # Find the first number equal or greater than 3:
+//
+//	numbers := arrays.New(1, 2, 3, 4, 5, 6)
+//	three, _ := numbers.Find(func(_, i2 int) bool {
+//		return i2 >= 3
+//	})
+//
+//	fmt.Println(third) // should print '3', the first matching result
+//
+// # this method returns error if item was not found
+//
+//	_, err := numbers.Find(func(_, i2 int) bool {
+//		return i2 == 10 // 10 don't exists in the array
+//	})
+//
+//	fmt.Println(err) // prints "item was not found in array"
 func (a Array[T]) Find(f func(int, T) bool) (T, error) {
 	for i, v := range a {
 		if f(i, v) {
@@ -237,6 +312,20 @@ func Map[T, E any](a Array[T], f func(int, T) E) []E {
 	return result
 }
 
+// # Filter
+//
+// similar to the Find method, but returns a slice of containing all matching resutls
+//
+// example:
+//
+// # find all numbers greater than 18:
+//
+//	numbers := arrays.New(23, 12, 43, 6, 98)
+//	grt := numbers.Filter(func(_, i2 int) bool {
+//		return i2 > 18
+//	})
+//
+//	fmt.Println(grt) // [23, 43, 98]
 func (a Array[T]) Filter(f func(int, T) bool) []T {
 	result := make([]T, 0)
 
