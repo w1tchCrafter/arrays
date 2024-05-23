@@ -25,7 +25,7 @@ Arrays brings types, methods, and functions to enhance Go slices, inspired by Ja
 This package uses generics, requiring Go `1.18` or later.
 
 ```sh
-$ go get github.com/w1tchCrafter/arrays
+$ go get -u github.com/w1tchCrafter/arrays
 ```
 
 # Usage
