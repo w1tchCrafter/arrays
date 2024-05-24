@@ -2,3 +2,4 @@
 - [ ] Adding more secret in internals to reduce the arrays load
 - [ ] Adding make this lib thread-safe
 - [ ] Adding a metadata in stats like lastPos ...
+- [ ] Adding wrappers around slices package
