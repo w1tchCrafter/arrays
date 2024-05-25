@@ -21,3 +21,4 @@ func TestIndexOf(t *testing.T) {
 		t.Fail()
 	}
 }
+
