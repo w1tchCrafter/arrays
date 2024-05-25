@@ -1,7 +1,7 @@
 package arrays_test
 
 import(
-  "arrays/pkg/arrays"
+  "github.com/w1tchCrafter/arrays/pkg/arrays"
   "testing"
 )
 
