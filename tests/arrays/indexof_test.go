@@ -1,8 +1,8 @@
 package arrays_test
 
-import(
-  "arrays/pkg/arrays"
-  "testing"
+import (
+	"arrays/pkg/arrays"
+	"testing"
 )
 
 func TestIndexOf(t *testing.T) {
@@ -21,4 +21,3 @@ func TestIndexOf(t *testing.T) {
 		t.Fail()
 	}
 }
-

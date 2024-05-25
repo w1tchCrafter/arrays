@@ -13,13 +13,12 @@ If the item is present more than once, it returns the position of the first occu
 */
 func (a Array[T]) IndexOf(item T) int {
 	result := -1
-  
+
 	for i, v := range a.elements {
-    if reflect.DeepEqual(v, item) {
-      return i
-    }
+		if reflect.DeepEqual(v, item) {
+			return i
+		}
 	}
 
 	return result
 }
-
