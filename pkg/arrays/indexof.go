@@ -22,3 +22,4 @@ func (a Array[T]) IndexOf(item T) int {
 
 	return result
 }
+
