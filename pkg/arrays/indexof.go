@@ -17,6 +17,7 @@ func (a Array[T]) IndexOf(t T) int {
 	for i, v := range a.elements {
 		if fmt.Sprint(v) == fmt.Sprint(t) {
 			result = i
+			break
 		}
 	}
 
