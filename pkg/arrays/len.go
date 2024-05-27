@@ -1,11 +1,10 @@
 package arrays
 
-/* 
-  # Len
+/*
+# Len
 
- Returns the array lenght
+Returns the array lenght
 */
-
 func (a Array[T]) Len() int {
-  return len(a.elements)
+	return len(a.elements)
 }
