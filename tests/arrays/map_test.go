@@ -1,14 +1,14 @@
 package arrays_test
 
 import (
-	"arrays/pkg/arrays"
+	"github.com/w1tchCrafter/arrays/pkg/arrays"
 	"testing"
 )
 
-func TestMap(t *testing.T){
-  arr := arrays.New(2, 3, 5, 7)
+func TestMap(t *testing.T) {
+	arr := arrays.New(2, 3, 5, 7)
 
-  // should double the given element
+	// should double the given element
 	result := arrays.Map(arr, func(_, n int) int {
 		return n * 2
 	})

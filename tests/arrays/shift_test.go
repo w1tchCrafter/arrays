@@ -2,7 +2,7 @@ package arrays_test
 
 import (
   "testing"
-  "arrays/pkg/arrays"
+  "github.com/w1tchCrafter/arrays/pkg/arrays"
 )
 
 func TestShift(t *testing.T) {

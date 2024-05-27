@@ -1,14 +1,14 @@
 package arrays_test
 
 import (
-	"arrays/pkg/arrays"
+	"github.com/w1tchCrafter/arrays/pkg/arrays"
 	"testing"
 )
 
 func TestFind(t *testing.T) {
-  arr := arrays.New(12, 54, 2, 0, 322)
+	arr := arrays.New(12, 54, 2, 0, 322)
 
-  found, err := arr.Find(func(_, i2 int) bool {
+	found, err := arr.Find(func(_, i2 int) bool {
 		return i2 > 100
 	})
 
