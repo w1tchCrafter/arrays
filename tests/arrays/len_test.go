@@ -1,6 +1,6 @@
 package arrays_test
 
-import "arrays/pkg/arrays"
+import "github.com/w1tchCrafter/arrays/pkg/arrays"
 import "testing"
 
 func TestLen(t *testing.T){
