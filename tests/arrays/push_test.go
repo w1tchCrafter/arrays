@@ -3,7 +3,7 @@ package arrays_test
 import(
   "testing"
   "reflect"
-  "arrays/pkg/arrays"
+  "github.com/w1tchCrafter/arrays/pkg/arrays"
 )
 
 func TestPush(t *testing.T) {

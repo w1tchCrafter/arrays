@@ -1,8 +1,9 @@
 package arrays_test
 
-import(
-  "arrays/pkg/arrays"
-  "testing"
+import (
+	"testing"
+
+	"github.com/w1tchCrafter/arrays/pkg/arrays"
 )
 
 func TestIndexOf(t *testing.T) {
@@ -21,4 +22,3 @@ func TestIndexOf(t *testing.T) {
 		t.Fail()
 	}
 }
-
