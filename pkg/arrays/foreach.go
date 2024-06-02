@@ -3,12 +3,13 @@ package arrays
 /*
 # ForEach
 
- execute a callback function en each array element
+execute a callback function en each array element
 
- Example:
+Example:
 
-	names := arrays.New("john", "doe")
-	names.ForEach(func(s string, i int) {
+names := arrays.New("john", "doe")
+
+names.ForEach(func(s string, i int) {
 		fmt.Printf("index: %d, value: %s\n", i, s)
 	})
 */
