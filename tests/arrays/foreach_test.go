@@ -1,15 +1,16 @@
 package arrays_test
 
 import (
-	"github.com/w1tchCrafter/arrays/pkg/arrays"
 	"fmt"
-  "testing"
+	"testing"
+
+	"github.com/w1tchCrafter/arrays/pkg/arrays"
 )
 
 func TestForEach(t *testing.T) {
-  arr := arrays.New("this", "is", "a", "test")
+	arr := arrays.New("this", "is", "a", "test")
 
-  arr.ForEach(func(i int, s string) {
-    fmt.Println(i, s)
-  })
+	arr.ForEach(func(s string, i int) {
+		fmt.Println(i, s)
+	})
 }
