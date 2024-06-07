@@ -18,6 +18,7 @@ The Reduce function runs a function on each array element to produce (reduce it 
 if multiple values are passed to initial only the first one will be used
 
 initial is required if the generic types T and E are different
+if initial is not passed in this case an empty value is returned
 
 # This example reduces an array of integers to a single value:
 
@@ -34,6 +35,8 @@ initial is required if the generic types T and E are different
 	str := arrays.Reduce(arr, func(acm string, item, _ int) string {
 		return fmt.Sprint(acm, item)
 	}, "") // returns "2518322015"
+
+Reduce returns an empty value in case of empty array
 */
 func Reduce[T, E any](a Array[T], cb func(accumulator E, item T, index int) E, initial ...E) E {
 	var acm E
